@@ -63,9 +63,7 @@ if [ ${SKIP_GCP_CERT} = false ]; then
 		echo Logging in to GCP failed
 		exit 1;
 	fi
-
-	gcloud compute target-https-proxies list
-
+	
 	echo Importing cert to GCP environment
 	gcloud compute ssl-certificates create ${GCP_CERT_NAME} --certificate=${PUB_CERT} --private-key=${PRIV_KEY} --description="Letsencrypt cert updated $(date)"
 	echo Adding cert to HTTPS proxy
