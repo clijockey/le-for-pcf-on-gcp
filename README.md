@@ -9,8 +9,9 @@ This is the source code for a Docker image that does the following:
 	* Harbor
 
 ### Input Variables needed
+* `PROJECT` - GCP Project that the cert and load balancer reside in
 * `GCP_CREDENTIALS` - GCP credentials in JSON, you should request a service account with DNS Admin credentials
-* `CF_DOMAINS` - comma separated list of PCF domains, e.g. `*.sys.example.com,*.login.sys.example.com,*.cfapps.example.com`
+* `DOMAIN` - The domain you want to use, the usual PCF subdomains will auto be added to certs
 * `LE_EMAIL` - email address to issue the certificates to
 * `PCF_OPSMGR` - URL for opsmanager in the format `https://opsman.xxx.yyy`
 * `PCF_PASSWD` - ops manager password
@@ -30,7 +31,7 @@ This is the source code for a Docker image that does the following:
 * `CERT_RENEW_BEFORE` - number of seconds the certificate may have left before renewing - defaults to 7 days (`604800`)
 
 ## Docker Hub
-You can download it on Docker Hub too as `mattsday/le-pcf-on-gcp`
+You can download it on Docker Hub too as `clijockey/le-pcf-on-gcp`
 
 ### Running the Docker Image
 Assuming you have the above environment variables set:
@@ -42,8 +43,8 @@ docker run \
   -e PCF_OPSMGR=${PCF_OPSMGR} \
   -e LE_EMAIL=${LE_EMAIL} \
   -e GCP_HTTPS_PROXY=${GCP_HTTPS_PROXY} \
-  -e CF_DOMAINS=${CF_DOMAINS} \
-  mattsday/le-pcf-on-gcp:latest
+  -e DOMAIN=${DOMAIN} \
+  clijockey/le-pcf-on-gcp:latest
 ```
 
 
