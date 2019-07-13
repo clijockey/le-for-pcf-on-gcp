@@ -133,7 +133,7 @@ fi
 
 if [ ${SKIP_OPSMAN_APPLY} = false ]; then
 	echo Applying ops manager changes
-	om -k -u "${PCF_USER}" -p "${PCF_PASSWD}" -t "${PCF_OPSMGR}" apply-changes
+	om -k -u "${PCF_USER}" -p "${PCF_PASSWD}" -t "${PCF_OPSMGR}" apply-changes --product-name cf
 else
 	echo Skipping applying ops manager changes
 fi
