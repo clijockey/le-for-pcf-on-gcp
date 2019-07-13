@@ -1,7 +1,8 @@
 #!/bin/bash
 
+if [ -z "${PROJECT}" ]; then echo No PROJECT; exit 1; fi
 if [ -z "${GCP_CREDENTIALS}" ]; then echo No GCP_CREDENTIALS; exit 1; fi
-if [ -z "${CF_DOMAINS}" ]; then echo No CF_DOMAINS; exit 1; fi
+if [ -z "${DOMAIN}" ]; then echo No DOMAIN; exit 1; fi
 if [ -z "${LE_EMAIL}" ]; then echo No LE_EMAIL; exit 1; fi
 if [ -z "${LE_SERVER}" ]; then export LE_SERVER="https://acme-v02.api.letsencrypt.org/directory"; fi
 if [ -z "${GCP_CREDENTIALS_FILE}" ]; then export GCP_CREDENTIALS_FILE="/accounts.json"; fi
@@ -17,6 +18,9 @@ if [ -z "${SKIP_PKS_CERT}" ]; then echo Updating PKS Certificate by default; SKI
 if [ -z "${SKIP_HARBOR_CERT}" ]; then echo Updating Harbor Certificate by default; SKIP_HARBOR_CERT=false; fi
 if [ -z "${SKIP_GCP_CERT}" ]; then echo Updating GCP Certificate by default; SKIP_GCP_CERT=false; fi
 if [ -z "${SKIP_OPSMAN_APPLY}" ]; then echo Applying changes in ops manager by default; SKIP_OPSMAN_APPLY=false; fi
+
+
+CF_DOMAINS="*.sys.${DOMAIN},*.login.sys.${DOMAIN},*.apps.${DOMAIN},*.uaa.sys.${DOMAIN},harbor.${DOMAIN},opsman.${DOMAIN},*.pks.${DOMAIN},*.pb.${DOMAIN}"
 
 echo ${GCP_CREDENTIALS} | tee ${GCP_CREDENTIALS_FILE} >/dev/null
 
