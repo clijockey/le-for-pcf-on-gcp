@@ -45,9 +45,18 @@ fi
 PUB_CERT=/etc/letsencrypt/live/le/fullchain.pem
 PRIV_KEY=/etc/letsencrypt/live/le/privkey.pem
 
+echo The generated certs are
+echo
+cat /etc/letsencrypt/live/le/privkey.pem
+echo
+cat /etc/letsencrypt/live/le/fullchain.pem
+echo Validating the certificate
+openssl x509 -noout -text -in /etc/letsencrypt/live/le/fullchain.pem
+
 if [ ${SKIP_GCP_CERT} = false ]; then
 	echo Updating Google Load Balancer Certificate
 	# Create cert in GCP
+	gcloud config set project ${PROJECT}
 	gcloud auth activate-service-account --key-file=${GCP_CREDENTIALS_FILE}
 
 	if [ $? -ne 0 ]; then
@@ -55,7 +64,11 @@ if [ ${SKIP_GCP_CERT} = false ]; then
 		exit 1;
 	fi
 
+	gcloud compute target-https-proxies list
+
+	echo Importing cert to GCP environment
 	gcloud compute ssl-certificates create ${GCP_CERT_NAME} --certificate=${PUB_CERT} --private-key=${PRIV_KEY} --description="Letsencrypt cert updated $(date)"
+	echo Adding cert to HTTPS proxy
 	gcloud compute target-https-proxies update ${GCP_HTTPS_PROXY} --ssl-certificates=${GCP_CERT_NAME}
 else
 	echo Skipping updating Google Load Balancer Certificate
